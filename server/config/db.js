@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+const { connect } = require('mongoose');
 
 const connectToDatabase = async () =>
   {
     try
     {
-      const conn = await mongoose.connect(process.env.MONGO_URI,
+      console.log('Initiating database connection...')
+      const connectionResponse = await connect(process.env.MONGO_URI,
         {
           useUnifiedTopology: true,
           useNewUrlParser: true,
@@ -12,7 +13,7 @@ const connectToDatabase = async () =>
           useFindAndModify: false
         });
 
-      console.log(`MongoDB Connected: ${conn.connection.host}`);
+      console.log(`Connected to MongoDB Atlas: ${connectionResponse.connection.host}`);
     }
 
     catch (err)

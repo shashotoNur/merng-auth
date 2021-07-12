@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLNonNull } = require('graphql');
 
-const { loginUser, createUser, deleteUser } = require('../controllers/userControllers');
+const { loginUser, createUser, deleteUser } = require('../controllers/authController');
 
 // Return types
 const UserType = new GraphQLObjectType(
@@ -19,7 +19,8 @@ const loginUserQuery = {
     type: UserType,
     args: {
         email: { type: new GraphQLNonNull(GraphQLString) },
-        password: { type: new GraphQLNonNull(GraphQLString) }
+        password: { type: GraphQLString },
+        idToken: { type: new GraphQLObjectType(GraphQLString) }
     },
     resolve(_parent, args) { return loginUser(args); }
 }
@@ -29,18 +30,23 @@ const createUserMutation = {
     args:
     {
         email: { type:  new GraphQLNonNull(GraphQLString) },
-        password: { type:  new GraphQLNonNull(GraphQLString) }
+        password: { type: GraphQLString },
+        idToken: { type: new GraphQLObjectType(GraphQLString) }
     },
     resolve(_parent, args) { return createUser(args); }
 };
 
 const deleteUserMutation = {
     type: UserType,
-    args: {
-        token: { type: new GraphQLNonNull(GraphQLString)},
-        password: { type:  new GraphQLNonNull(GraphQLString) }
-     },
-    resolve(_parent, args, context) { return deleteUser(args, context); }
+    resolve(_parent, _args, context) { return deleteUser(context); }
 };
 
-module.exports = { loginUserQuery, createUserMutation, deleteUserMutation };
+const updatePasswordMutation = {
+    type: UserType,
+    args: {
+        newPassword: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    resolve(_parent, args, context) { return updatePassword(args, context); }
+};
+
+module.exports = { loginUserQuery, createUserMutation, deleteUserMutation, updatePasswordMutation };

@@ -5,7 +5,8 @@ const User = require('../models/userModel');
 
 const requireAuth = async (req, res, next) =>
 {
-  const destination = req.header('header-dest-value');
+  if(req.header('header-dest-value')) destination = req.header('header-dest-value') ;
+  else return { status: 'Request destination is not specified' };
 
   if(destination !== 'signup' || destination !== 'login')
   {

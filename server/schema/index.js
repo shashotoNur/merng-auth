@@ -1,7 +1,7 @@
 const { GraphQLObjectType, GraphQLSchema } = require('graphql');
 
 const { loginUserQuery, createUserMutation, deleteUserMutation } = require('./authSchema')
-const { getPageQuery } = require('./pagesSchema');
+const { getProfileQuery } = require('./profileSchema');
 
 // Reading data
 const RootQuery = new GraphQLObjectType(
@@ -10,7 +10,7 @@ const RootQuery = new GraphQLObjectType(
         fields:
         {
             loginUserQuery,
-            getPageQuery
+            getProfileQuery
         }
     });
 
@@ -21,7 +21,8 @@ const Mutation = new GraphQLObjectType(
         fields:
         {
             createUserMutation,
-            deleteUserMutation
+            deleteUserMutation,
+            updatePasswordMutation
         }
     });
 
