@@ -6,11 +6,11 @@ import { Switch, Route } from 'react-router-dom';
 
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
-import Profile from "./components/auth/Profile";
+import Profile from "./components/user/Profile";
 
 const httpLink = createHttpLink(
   {
-    uri: '/graphql',
+    uri: 'http://localhost:5000/graphql',
     credentials: 'include'
   });
 
@@ -26,14 +26,14 @@ const client = new ApolloClient(
     cache: new InMemoryCache()
   });
 
-const Index = (token) ? <Profile client={ client }/> : <Login />;
+//const Index = (token) ? <Profile client={ client } /> : <Login />;
 
 const App = () =>
   {
     return (
       <ApolloProvider client={ client } className="App">
         <Switch>
-          <Route exact path="/" component={ Index } />
+          <Route exact path="/" component={ Login } />
           <Route exact path="/signup" component={ SignUp } />
         </Switch>
       </ApolloProvider>

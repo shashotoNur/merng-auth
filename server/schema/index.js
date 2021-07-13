@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLSchema } = require('graphql');
 
-const { loginUserQuery, createUserMutation, deleteUserMutation } = require('./authSchema')
+const { loginUserQuery, createUserMutation, deleteUserMutation, updatePasswordMutation } = require('./authSchema')
 const { getProfileQuery } = require('./profileSchema');
 
 // Reading data
