@@ -29,7 +29,8 @@ const createUserMutation = {
     type: UserType,
     args:
     {
-        email: { type:  new GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: GraphQLString },
         idToken: { type: new GraphQLObjectType(GraphQLString) }
     },

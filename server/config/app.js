@@ -10,7 +10,13 @@ const app = express();
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use(cors());
+// enable cors
+const corsOptions = {
+  origin: 'localhost:3000',
+  credentials: true // <-- REQUIRED backend setting
+};
+app.use(cors(corsOptions));
+
 //app.use(requireAuth);
 
 app.use(process.env.GRAPHQL_ROUTE, graphqlHTTP(

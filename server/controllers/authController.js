@@ -8,23 +8,32 @@ const { OAuth2Client } = require('google-auth-library');
 
 const oAuthHandler = async (idToken) =>
   {
-      try
+    var action;
+    try
+    {
+      const client = new OAuth2Client(process.env.GOOGLE_OAUTH_CLIENT_ID);
+      const ticket = await client.verifyIdToken(
+        {
+            idToken,
+            audience: process.env.GOOGLE_OAUTH_CLIENT_ID
+        });
+      const { sub, name, email } = ticket.getPayload();    
+
+      let user = await User.findOne({ sub });
+
+      if(user) action = 'Login';
+      else
       {
-        const client = new OAuth2Client(process.env.GOOGLE_OAUTH_CLIENT_ID);
-        const ticket = await client.verifyIdToken(
-          {
-              idToken,
-              audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-          });
-        const { sub, name, email, picture } = ticket.getPayload();    
-
-        let user = await User.findOne({ sub });
-
-        if (!user) user = await User.create({ sub, name, email, image: picture });
-        if (!user) return { status: 'Something went wrong saving the user' };
-        return user;
+        user = await User.create({ sub, name, email });
+        action = 'SignUp';
       }
-      catch (err) { return { status: err.message }; };
+
+      if (!user) return { status: 'Something went wrong saving the user' };
+
+      user.password = null; user.status = `${action} successful!`;
+      return user;
+    }
+    catch (err) { return { status: err.message }; };
   };
 
 const loginUser = async (args) =>
@@ -46,7 +55,7 @@ const loginUser = async (args) =>
         const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: 3600 });
         if (!token) return { status: "Couldn't sign the token" };
 
-        user.token = token; user.status = 'Sign in successful!';
+        user.token = token; user.password = null; user.status = 'Sign in successful!';
         return user;
       }
       catch (err) { return { status: err.message }; };
@@ -58,11 +67,11 @@ const loginUser = async (args) =>
 
 const createUser = async (args) =>
   {
-    const { email, password, idToken } = args;
+    const { name, email, password, idToken } = args;
 
     if(idToken && !email && !password) oAuthHandler(idToken);
 
-    else if(email && password)
+    else if(email && password && name)
     {
       try
       {
@@ -75,7 +84,7 @@ const createUser = async (args) =>
         const hash = await bcrypt.hash(password, salt);
         if (!hash) return { status: 'Something went wrong hashing the password' };
 
-        var newUser = new User( { email, password: hash } );
+        var newUser = new User( { name, email, password: hash } );
 
         var savedUser = await newUser.save();
         if (!savedUser) return { status: 'Something went wrong saving the user' };
@@ -83,7 +92,7 @@ const createUser = async (args) =>
         const threeDays = (3 * 24 * 60 * 60);
         const token = jwt.sign({ id: savedUser._id }, jwtSecret, { expiresIn: threeDays });
 
-        savedUser.token = token; savedUser.status = 'User successfully created!';
+        savedUser.token = token; savedUser.password = null; savedUser.status = 'User successfully created!';
         return savedUser;
       }
       catch (err) { return { status: err.message }; };
@@ -102,11 +111,12 @@ const deleteUser = async (context) =>
 
       var deletedUser = await User.findByIdAndDelete(id);
 
-      deletedUser.status = "User has been deleted!";
-      return deletedUser;
+      if(deletedUser.id !== null) return { status: 'Deletion failed! Try again.' };
+
+      return { status: 'User deleted successfully!' };
     }
     catch (err) { return { status: err.message }; };
-  }
+  };
 
 const updatePassword = async (args, context) =>
   {
@@ -119,10 +129,10 @@ const updatePassword = async (args, context) =>
 
       var user = await User.findByIdAndUpdate(id, { password: newPassword });
 
-      user.status = "User has been deleted!";
+      user.password = null; user.status = "Password has been updated!";
       return user;
     }
     catch (err) { return { status: err.message }; };
-  }
+  };
 
 module.exports = { loginUser, createUser, deleteUser, updatePassword };
