@@ -5,8 +5,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Switch, Route } from 'react-router-dom';
 
 import SignUp from "./components/auth/SignUp";
-import Login from "./components/auth/Login";
-import Profile from "./components/user/Profile";
+import Index from "./components/";
 
 const httpLink = createHttpLink(
   {
@@ -26,14 +25,13 @@ const client = new ApolloClient(
     cache: new InMemoryCache()
   });
 
-//const Index = (token) ? <Profile client={ client } /> : <Login />;
 
 const App = () =>
   {
     return (
       <ApolloProvider client={ client } className="App">
         <Switch>
-          <Route exact path="/" component={ Login } />
+          <Route exact path="/" props={ client } component={ Index } />
           <Route exact path="/signup" component={ SignUp } />
         </Switch>
       </ApolloProvider>

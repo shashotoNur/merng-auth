@@ -2,8 +2,8 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const cors = require('cors');
 
-const schema = require('../schema/index');
-const { requireAuth } = require('../middleware/authMiddleware');
+const schema = require('../schema/');
+const { getReqUser } = require('../middleware/getReqUser');
 
 const app = express();
 
@@ -12,12 +12,12 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 // enable cors
 const corsOptions = {
-  origin: 'localhost:3000',
+  origin: 'http://localhost:3000',
   credentials: true // <-- REQUIRED backend setting
 };
 app.use(cors(corsOptions));
 
-//app.use(requireAuth);
+app.use(getReqUser);
 
 app.use(process.env.GRAPHQL_ROUTE, graphqlHTTP(
   (req, res) =>

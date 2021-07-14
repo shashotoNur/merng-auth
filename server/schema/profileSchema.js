@@ -5,16 +5,16 @@ const { getProfile } = require('../controllers/profileController');
 // Return types
 const ProfileType = new GraphQLObjectType(
     {
-        name: 'Page',
+        name: 'ProfileType',
         fields: () => ({
-            status: { type: GraphQLString }
+            status:{ type: GraphQLString },
         })
     });
 
 // Queries and Mutations
 const getProfileQuery = {
     type: ProfileType,
-    resolve(_parent, _args) { return getProfile(); }
+    resolve() { return getProfile(); }
 };
 
 module.exports = { getProfileQuery };

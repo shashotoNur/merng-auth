@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+
 import GoogleLogin from 'react-google-login';
 import { useMutation } from '@apollo/client';
 
@@ -39,20 +41,24 @@ const SignUp = () =>
         console.log(data?.status);
 
         return (
-            <form onSubmit={ submitHandler } className="SignUp">
-                <input type='text' className='input' onChange={onNameChange} placeholder={name} />
-                <input type='text' className='input' onChange={onEmailChange} placeholder={email} />
-                <input type='password' className='input' onChange={onPasswordChange} placeholder={password} />
-                <button type="submit">SignUp</button>
+            <>
+                <form onSubmit={ submitHandler } className="SignUp">
+                    <input type='text' className='input' onChange={onNameChange} placeholder={name} />
+                    <input type='text' className='input' onChange={onEmailChange} placeholder={email} />
+                    <input type='password' className='input' onChange={onPasswordChange} placeholder={password} />
+                    <button type="submit">SignUp</button>
 
-                <GoogleLogin
-                    clientId="248809747957-t28kdcifl2ujfhvqlqmhaubscpui2299.apps.googleusercontent.com"
-                    buttonText="SignUp"
-                    onSuccess={ successHandler }
-                    onFailure={ errorHandler }
-                    cookiePolicy={'single_host_origin'}
-                />
-            </form>
+                    <GoogleLogin
+                        clientId="248809747957-t28kdcifl2ujfhvqlqmhaubscpui2299.apps.googleusercontent.com"
+                        buttonText="SignUp"
+                        onSuccess={ successHandler }
+                        onFailure={ errorHandler }
+                        cookiePolicy={'single_host_origin'}
+                    />
+                </form>
+
+                <Link to="/"> Login as a user </Link>
+            </>
         );
     };
 

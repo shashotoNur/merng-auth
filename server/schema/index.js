@@ -4,30 +4,30 @@ const { loginUserQuery, createUserMutation, deleteUserMutation, updatePasswordMu
 const { getProfileQuery } = require('./profileSchema');
 
 // Reading data
-const RootQuery = new GraphQLObjectType(
+const QueryType = new GraphQLObjectType(
     {
-        name: 'RootQueryType',
+        name: 'QueryType',
         fields:
         {
-            loginUserQuery,
-            getProfileQuery
+            loginUserQuery: loginUserQuery,
+            getProfileQuery: getProfileQuery
         }
     });
 
 // Anything other than reading
-const Mutation = new GraphQLObjectType(
+const MutationType = new GraphQLObjectType(
     {
-        name: 'Mutation',
+        name: 'MutationType',
         fields:
         {
-            createUserMutation,
-            deleteUserMutation,
-            updatePasswordMutation
+            createUserMutation: createUserMutation,
+            deleteUserMutation: deleteUserMutation,
+            updatePasswordMutation: updatePasswordMutation
         }
     });
 
 
 module.exports = new GraphQLSchema({
-    query: RootQuery,
-    mutation: Mutation
+    query: QueryType,
+    mutation: MutationType
 });

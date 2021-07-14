@@ -5,6 +5,7 @@ const getProfile = (context) =>
     {
         const { res } = context;
         const { user } = res.locals;
+        if(!user) return { status: "Request unauthorized!" };
 
         const profile = {
             name: user.name,

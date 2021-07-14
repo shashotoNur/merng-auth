@@ -38,6 +38,7 @@ const oAuthHandler = async (idToken) =>
 
 const loginUser = async (args) =>
   {
+    console.log('Logging in')
     var { email, password, idToken } = args;
 
     if(idToken && !email && !password) oAuthHandler(idToken);
@@ -108,6 +109,7 @@ const deleteUser = async (context) =>
     try
     {
       const { id } = res.locals.user;
+      if(!id) return { status: "Request unauthorized!" };
 
       var deletedUser = await User.findByIdAndDelete(id);
 
@@ -126,6 +128,7 @@ const updatePassword = async (args, context) =>
     try
     {
       const { id } = res.locals.user;
+      if(!id) return { status: "Request unauthorized!" };
 
       var user = await User.findByIdAndUpdate(id, { password: newPassword });
 
