@@ -10,7 +10,11 @@ import Index from "./components/";
 const httpLink = createHttpLink(
   {
     uri: 'http://localhost:5000/graphql',
-    credentials: 'include'
+    credentials: 'include',
+    onError: ({ networkError, graphQLErrors }) => {
+      console.log('graphQLErrors:', graphQLErrors)
+      console.log('networkError:', networkError)
+    }
   });
 
 const token = localStorage.getItem('token');

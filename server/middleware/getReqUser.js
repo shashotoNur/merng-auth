@@ -10,7 +10,6 @@ const getReqUser = async (req, res, next) =>
     if (token == null) next();
     else
     {
-      console.log(`shouldn't be here`)
       try
       {
         const decodedToken = jwt.verify(token, jwtSecret);

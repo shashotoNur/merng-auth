@@ -1,45 +1,35 @@
 import { gql } from 'apollo-boost';
 
 const loginUserQuery = gql`
-    query LoginUser($email: String!, $password: String!, $idToken: Object!) {
-        loginUserQuery(email: $email, password: $password, idToken: $idToken) {
-            token
-            status
-        }
+    query loginUserQuery($email: String!, $password: String!, $idToken: Object!) {
+        token
+        status
     }
 `;
 
 const getProfileQuery = gql`
-    query GetProfile {
-        getProfileQuery {
-            name
-            status
-        }
+    query getProfileQuery {
+        name
+        status
     }
 `;
 
 const createUserMutation = gql`
-    mutation CreateUser($name: String!, $email: String!, $password: String!, $idToken: Object!) {
-        createUserMutation(name: $name, email: $email, password: $password, idToken: $idToken) {
-            token
-            status
-        }
+    mutation createUserMutation($name: String!, $email: String!, $password: String!, $idToken: Object!) {
+        token
+        status
     }
 `;
 
 const deleteUserMutation = gql`
-    mutation DeleteUser {
-        deleteUserMutation {
-            status
-        }
+    mutation deleteUserMutation {
+        status
     }
 `;
 
 const updatePasswordMutation = gql`
     mutation UpdatePassword($password: String!) {
-        updatePassword(password: $password) {
-            status
-        }
+        status
     }
 `;
 

@@ -18,21 +18,21 @@ const UserType = new GraphQLObjectType(
 const loginUserQuery = {
     type: UserType,
     args: {
-        email: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: GraphQLString },
         password: { type: GraphQLString },
-        idToken: { type: GraphQLList(GraphQLString) }
+        idToken: { type: new GraphQLList(GraphQLString) }
     },
-    resolve(_parent, args) { return loginUser(args); }
+    resolve(_parent, args, context) { return loginUser(args, context); }
 };
 
 const createUserMutation = {
     type: UserType,
     args:
     {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        email: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
         password: { type: GraphQLString },
-        idToken: { type: GraphQLList(GraphQLString) }
+        idToken: { type: new GraphQLList(GraphQLString) }
     },
     resolve(_parent, args) { return createUser(args); }
 };

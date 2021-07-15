@@ -21,10 +21,7 @@ const Login = () =>
         {
             const tokenId = res?.tokenId;
 
-            try {
-                loginUser({ variables: { tokenId }});
-                setEmail('Email'); setPassword('Password');
-            }
+            try { loginUser({ variables: { tokenId }}); }
             catch(err) { console.log(err); };
         };
 

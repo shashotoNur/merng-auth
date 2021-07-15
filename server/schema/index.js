@@ -9,8 +9,8 @@ const QueryType = new GraphQLObjectType(
         name: 'QueryType',
         fields:
         {
-            loginUserQuery: loginUserQuery,
-            getProfileQuery: getProfileQuery
+            loginUserQuery,
+            getProfileQuery
         }
     });
 
@@ -20,9 +20,9 @@ const MutationType = new GraphQLObjectType(
         name: 'MutationType',
         fields:
         {
-            createUserMutation: createUserMutation,
-            deleteUserMutation: deleteUserMutation,
-            updatePasswordMutation: updatePasswordMutation
+            createUserMutation,
+            deleteUserMutation,
+            updatePasswordMutation
         }
     });
 

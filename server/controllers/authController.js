@@ -36,9 +36,9 @@ const oAuthHandler = async (idToken) =>
     catch (err) { return { status: err.message }; };
   };
 
-const loginUser = async (args) =>
+const loginUser = async (args, context) =>
   {
-    console.log('Logging in')
+    console.log(context.res.locals)
     var { email, password, idToken } = args;
 
     if(idToken && !email && !password) oAuthHandler(idToken);

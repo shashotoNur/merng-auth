@@ -33,12 +33,15 @@ const SignUp = () =>
         {
             event.preventDefault();
 
-            try { createUser({ variables: { name, email, password } }); }
+            try {
+                createUser({ variables: { name, email, password } });
+                setName('Name'); setEmail('Email'); setPassword('Password');
+            }
             catch(err) { console.log(err); };
         };
 
         localStorage.setItem('token', data?.token);
-        console.log(data?.status);
+        if(data?.status !== undefined) console.log(data?.status);
 
         return (
             <>
@@ -46,7 +49,7 @@ const SignUp = () =>
                     <input type='text' className='input' onChange={onNameChange} placeholder={name} />
                     <input type='text' className='input' onChange={onEmailChange} placeholder={email} />
                     <input type='password' className='input' onChange={onPasswordChange} placeholder={password} />
-                    <button type="submit">SignUp</button>
+                    <button type="submit"> SignUp </button>
 
                     <GoogleLogin
                         clientId="248809747957-t28kdcifl2ujfhvqlqmhaubscpui2299.apps.googleusercontent.com"
