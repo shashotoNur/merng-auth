@@ -5,7 +5,7 @@ const Index = (props) =>
   {
     const token = localStorage.getItem('token');
 
-    if (token !== "undefined") return <Profile props={ props } />;
+    if (token && token !== "undefined") return <Profile props={ props } />;
     return <Login />;
   };
 

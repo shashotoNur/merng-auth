@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import GoogleLogin from 'react-google-login';
 import { useLazyQuery } from '@apollo/client';
 
-import { loginUserQuery } from '../../queries/query';
+import { loginUserQuery } from '../../schema/';
 
 const Login = () =>
     {
@@ -38,13 +38,13 @@ const Login = () =>
             catch(err) { console.log(err); };
         };
 
-        localStorage.setItem('token', data?.token);
+        data?.token && localStorage.setItem('token', data?.token);
         if(data?.status !== undefined) console.log(data?.status);
 
         if (loading) return <p>Loading ...</p>;
         return (
             <>
-                <form onSubmit={ submitHandler } className="Login">
+                <form onSubmit={ submitHandler }>
                     <input type='text' className='input' onChange={onEmailChange} placeholder={email} />
                     <input type='password' className='input' onChange={onPasswordChange} placeholder={password} />
                     <button type="submit"> Login </button>

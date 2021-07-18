@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import GoogleLogin from 'react-google-login';
 import { useMutation } from '@apollo/client';
 
-import { createUserMutation } from '../../queries/query';
+import { createUserMutation } from '../../schema/';
 
 const SignUp = () =>
     {
@@ -45,7 +45,7 @@ const SignUp = () =>
 
         return (
             <>
-                <form onSubmit={ submitHandler } className="SignUp">
+                <form onSubmit={ submitHandler }>
                     <input type='text' className='input' onChange={onNameChange} placeholder={name} />
                     <input type='text' className='input' onChange={onEmailChange} placeholder={email} />
                     <input type='password' className='input' onChange={onPasswordChange} placeholder={password} />

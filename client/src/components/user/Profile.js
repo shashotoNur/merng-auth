@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 
-import { getProfileQuery, updatePasswordMutation, deleteUserMutation } from '../../queries/query';
+import { getProfileQuery, updatePasswordMutation, deleteUserMutation } from '../../schema/';
 
-const Profile = (props) =>
+const Profile = ({ client }) =>
   {
     const { loading, error, data: profileData } = useQuery(getProfileQuery);
     const [deleteUser, { data: deletedUserData }] = useMutation(deleteUserMutation);
@@ -12,7 +12,7 @@ const Profile = (props) =>
 
     const onPasswordChange = (event) => { setPassword(event.target.value); };
 
-    const submitHandler = (event) =>
+    const updatePasswordFn = (event) =>
     {
         event.preventDefault();
 
@@ -34,7 +34,7 @@ const Profile = (props) =>
     const logout = () =>
     {
       localStorage.removeItem("token");
-      props.client.resetStore();
+      client.resetStore();
     }
 
     if (loading) return 'Loading...';
@@ -45,7 +45,7 @@ const Profile = (props) =>
         <p>{ profileData.status }</p>
 
         <p>{ updatedPasswordData?.status }</p>
-        <form onSubmit={ submitHandler } className="Login">
+        <form onSubmit={ updatePasswordFn }>
           <input type='password' className='input' onChange={onPasswordChange} placeholder={password} />
           <button type="submit"> Update Password </button>
         </form>

@@ -19,8 +19,7 @@ const loginUserQuery = {
     type: UserType,
     args: {
         email: { type: GraphQLString },
-        password: { type: GraphQLString },
-        idToken: { type: new GraphQLList(GraphQLString) }
+        password: { type: GraphQLString }
     },
     resolve(_parent, args, context) { return loginUser(args, context); }
 };
