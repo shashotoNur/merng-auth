@@ -22,10 +22,10 @@ const Login = () =>
             const tokenId = res?.tokenId;
 
             try { loginUser({ variables: { tokenId }}); }
-            catch(err) { console.log(err); };
+            catch(err) { console.log(err.message); };
         };
 
-        const errorHandler = async (err) => { console.log(err); };
+        const errorHandler = async (err) => { console.log(err.error); };
 
         const submitHandler = (event) =>
         {
@@ -35,11 +35,16 @@ const Login = () =>
                 loginUser({ variables: { email, password } });
                 setEmail('Email'); setPassword('Password');
             }
-            catch(err) { console.log(err); };
+            catch(err) { console.log(err.message); };
         };
 
-        data?.token && localStorage.setItem('token', data?.token);
-        if(data?.status !== undefined) console.log(data?.status);
+        try
+        {
+            console.log(data)
+            data?.loginUserQuery.token && localStorage.setItem('token', data?.loginUserQuery.token);
+            if(data?.loginUserQuery !== undefined) console.log(data?.loginUserQuery.status);
+        }
+        catch(err) {console.log(err.message); };
 
         if (loading) return <p>Loading ...</p>;
         return (

@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLList } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require('graphql');
 
 const { loginUser, createUser, deleteUser } = require('../controllers/authController');
 
@@ -7,8 +7,7 @@ const UserType = new GraphQLObjectType(
     {
         name: 'UserType',
         fields: () => ({
-            id: { type: GraphQLID },
-            email: { type: GraphQLString },
+            name: { type: GraphQLString },
             token: { type: GraphQLString },
             status: { type: GraphQLString }
         })
@@ -19,7 +18,8 @@ const loginUserQuery = {
     type: UserType,
     args: {
         email: { type: GraphQLString },
-        password: { type: GraphQLString }
+        password: { type: GraphQLString },
+        tokenId: { type: GraphQLString }
     },
     resolve(_parent, args, context) { return loginUser(args, context); }
 };
@@ -31,7 +31,7 @@ const createUserMutation = {
         name: { type: GraphQLString },
         email: { type: GraphQLString },
         password: { type: GraphQLString },
-        idToken: { type: new GraphQLList(GraphQLString) }
+        tokenId: { type: GraphQLString }
     },
     resolve(_parent, args) { return createUser(args); }
 };

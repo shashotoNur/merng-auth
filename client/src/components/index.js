@@ -1,11 +1,11 @@
 import Login from './auth/Login';
 import Profile from './user/Profile';
 
-const Index = (props) =>
+const Index = () =>
   {
     const token = localStorage.getItem('token');
 
-    if (token && token !== "undefined") return <Profile props={ props } />;
+    if (token && token !== "undefined") return <Profile />;
     return <Login />;
   };
 

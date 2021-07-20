@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 
 import { getProfileQuery, updatePasswordMutation, deleteUserMutation } from '../../schema/';
 
-const Profile = ({ client }) =>
+const Profile = () =>
   {
     const { loading, error, data: profileData } = useQuery(getProfileQuery);
     const [deleteUser, { data: deletedUserData }] = useMutation(deleteUserMutation);
@@ -31,18 +31,14 @@ const Profile = ({ client }) =>
       catch(err) { console.log(err); };
     };
 
-    const logout = () =>
-    {
-      localStorage.removeItem("token");
-      client.resetStore();
-    }
+    const logout = () => { localStorage.removeItem("token"); }
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
     return (
       <div className="profile">
-        <h3>Welcome, { profileData.name }</h3>
-        <p>{ profileData.status }</p>
+        <h3>Welcome, { profileData.getProfileQuery.name }</h3>
+        <p>{ profileData.getProfileQuery.status }</p>
 
         <p>{ updatedPasswordData?.status }</p>
         <form onSubmit={ updatePasswordFn }>
@@ -50,8 +46,8 @@ const Profile = ({ client }) =>
           <button type="submit"> Update Password </button>
         </form>
 
-        <input type='button' value='Delete Account' onClick={deleteAccount} className='button' />
-        <input onClick={ logout } value='Logout' />
+        <input type='button' defaultValue='Delete Account' onClick={deleteAccount} className='button' />
+        <input type='button' defaultValue='Logout' onClick={ logout } />
       </div>
     );
   };

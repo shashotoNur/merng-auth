@@ -30,7 +30,11 @@ const oAuthHandler = async (idToken) =>
 
       if (!user) return { status: 'Something went wrong saving the user' };
 
-      user.password = null; user.status = `${action} successful!`;
+      const threeDays = (3 * 24 * 60 * 60);
+      const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: threeDays });
+      if (!token) return { status: "Couldn't sign the token" };
+
+      user = { name: user.name, token, status: `${action} successful!` }
       return user;
     }
     catch (err) { return { status: err.message }; };
@@ -38,10 +42,9 @@ const oAuthHandler = async (idToken) =>
 
 const loginUser = async (args, context) =>
   {
-    console.log(context.res.locals)
-    var { email, password, idToken } = args;
+    var { email, password, tokenId } = args;
 
-    if(idToken && !email && !password) oAuthHandler(idToken);
+    if(tokenId && !email && !password) return await oAuthHandler(tokenId);
 
     else if(email && password)
     {
@@ -53,10 +56,11 @@ const loginUser = async (args, context) =>
         const validCreds = await bcrypt.compare(password, user.password);
         if (!validCreds) return { status: 'Invalid credentials' };
 
-        const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: 3600 });
+        const threeDays = (3 * 24 * 60 * 60);
+        const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: threeDays });
         if (!token) return { status: "Couldn't sign the token" };
 
-        user.token = token; user.password = null; user.status = 'Sign in successful!';
+        user = { name: user.name, token, status: `Login successful!` }
         return user;
       }
       catch (err) { return { status: err.message }; };
@@ -68,9 +72,9 @@ const loginUser = async (args, context) =>
 
 const createUser = async (args) =>
   {
-    const { name, email, password, idToken } = args;
+    const { name, email, password, tokenId } = args;
 
-    if(idToken && !email && !password) oAuthHandler(idToken);
+    if(tokenId && !email && !password) return await oAuthHandler(tokenId);
 
     else if(email && password && name)
     {
@@ -92,8 +96,9 @@ const createUser = async (args) =>
 
         const threeDays = (3 * 24 * 60 * 60);
         const token = jwt.sign({ id: savedUser._id }, jwtSecret, { expiresIn: threeDays });
+        if (!token) return { status: "Couldn't sign the token" };
 
-        savedUser.token = token; savedUser.password = null; savedUser.status = 'User successfully created!';
+        savedUser = { name: savedUser.name, token, status: `SignUp successful!` }
         return savedUser;
       }
       catch (err) { return { status: err.message }; };
@@ -130,10 +135,9 @@ const updatePassword = async (args, context) =>
       const { id } = res.locals.user;
       if(!id) return { status: "Request unauthorized!" };
 
-      var user = await User.findByIdAndUpdate(id, { password: newPassword });
+      await User.findByIdAndUpdate(id, { password: newPassword });
 
-      user.password = null; user.status = "Password has been updated!";
-      return user;
+      return { status: "Password has been updated!" };
     }
     catch (err) { return { status: err.message }; };
   };

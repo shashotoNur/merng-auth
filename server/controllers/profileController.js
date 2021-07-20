@@ -3,8 +3,8 @@ const getProfile = (context) =>
 {
     try
     {
-        const { res } = context;
-        const { user } = res.locals;
+        console.log(context)
+        const { user } = context.res.locals;
         if(!user) return { status: "Request unauthorized!" };
 
         const profile = {

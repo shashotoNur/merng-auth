@@ -24,24 +24,29 @@ const SignUp = () =>
             const tokenId = res?.tokenId;
 
             try { createUser({ variables: { tokenId } }); }
-            catch(err) { console.log(err); };
+            catch(err) { console.log(err.message); };
         };
         
-        const errorHandler = async (err) => { console.log(err); };
+        const errorHandler = async (err) => { console.log(err.error); };
 
         const submitHandler = (event) =>
         {
             event.preventDefault();
 
-            try {
+            try
+            {
                 createUser({ variables: { name, email, password } });
                 setName('Name'); setEmail('Email'); setPassword('Password');
             }
-            catch(err) { console.log(err); };
+            catch(err) { console.log(err.message); };
         };
 
-        localStorage.setItem('token', data?.token);
-        if(data?.status !== undefined) console.log(data?.status);
+        try
+        {
+            if(data?.createUserMutation !== undefined) console.log(data);
+            data?.createUserMutation.token && localStorage.setItem('token', data?.createUserMutation.token);
+        }
+        catch(err) { console.log(err.message); };
 
         return (
             <>

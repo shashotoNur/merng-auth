@@ -7,7 +7,8 @@ const getReqUser = async (req, res, next) =>
   {
     const token = req.header.token;
 
-    if (token == null) next();
+    if (token == null || token == undefined) next();
+
     else
     {
       try
