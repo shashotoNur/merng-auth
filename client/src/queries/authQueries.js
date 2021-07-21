@@ -9,15 +9,6 @@ const loginUserQuery = gql`
     }
 `;
 
-const getProfileQuery = gql`
-    {
-        getProfileQuery {
-            name
-            status
-        }
-    }
-`;
-
 const createUserMutation = gql`
     mutation CreateUserMutation($name: String, $email: String, $password: String, $tokenId: String) {
         createUserMutation(name: $name, email: $email, password: $password, tokenId: $tokenId) {
@@ -27,22 +18,5 @@ const createUserMutation = gql`
     }
 `;
 
-const deleteUserMutation = gql`
-    mutation DeleteUserMutation {
-        deleteUserMutation {
-            status
-        }
-    }
-`;
 
-const updatePasswordMutation = gql`
-    mutation UpdatePasswordMutation($password: String!) {
-        updatePasswordMutation(password: $password) {
-            status
-        }
-    }
-`;
-
-
-export { loginUserQuery, createUserMutation, deleteUserMutation,
-        updatePasswordMutation, getProfileQuery };
+export { loginUserQuery, createUserMutation };

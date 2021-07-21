@@ -17,10 +17,12 @@ const httpLink = createHttpLink(
     }
   });
 
-const token = localStorage.getItem('token');
 const authLink = setContext((_, { headers }) =>
   {
-    return { headers: { ...headers, token } };
+    const token = localStorage.getItem('token');
+    const authLink = { headers: { ...headers, token } };
+
+    return authLink
   });
 
 const client = new ApolloClient(

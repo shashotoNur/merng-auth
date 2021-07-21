@@ -19,10 +19,10 @@ app.use(cors(corsOptions));
 
 app.use(getReqUser);
 
-app.use(process.env.GRAPHQL_ROUTE, graphqlHTTP((req, res) =>
+app.use(process.env.GRAPHQL_ROUTE, graphqlHTTP((_req, res) =>
     ({
       schema: schema,
-      context: { req, res },
+      context: { user: res.locals?.user },
       graphiql: true
     })
   )

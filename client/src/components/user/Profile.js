@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 
-import { getProfileQuery, updatePasswordMutation, deleteUserMutation } from '../../schema/';
+import { getProfileQuery, updatePasswordMutation, deleteUserMutation } from '../../queries/profileQueries';
 
 const Profile = () =>
   {
@@ -26,7 +26,7 @@ const Profile = () =>
       {
         deleteUser();
         if(deletedUserData?.status === 'User deleted successfully!') logout();
-        else alert(deletedUserData?.status);
+        else console.log(deletedUserData?.status);
       }
       catch(err) { console.log(err); };
     };

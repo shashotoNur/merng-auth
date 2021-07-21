@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import GoogleLogin from 'react-google-login';
 import { useMutation } from '@apollo/client';
 
-import { createUserMutation } from '../../schema/';
+import { createUserMutation } from '../../queries/authQueries';
 
 const SignUp = () =>
     {

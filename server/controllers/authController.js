@@ -40,8 +40,9 @@ const oAuthHandler = async (idToken) =>
     catch (err) { return { status: err.message }; };
   };
 
-const loginUser = async (args, context) =>
+const loginUser = async (args) =>
   {
+    console.log(args)
     var { email, password, tokenId } = args;
 
     if(tokenId && !email && !password) return await oAuthHandler(tokenId);
@@ -107,39 +108,4 @@ const createUser = async (args) =>
     else return { status: 'Invalid signup arguments' };
   };
 
-const deleteUser = async (context) =>
-  {
-    const { res } = context;
-
-    try
-    {
-      const { id } = res.locals.user;
-      if(!id) return { status: "Request unauthorized!" };
-
-      var deletedUser = await User.findByIdAndDelete(id);
-
-      if(deletedUser.id !== null) return { status: 'Deletion failed! Try again.' };
-
-      return { status: 'User deleted successfully!' };
-    }
-    catch (err) { return { status: err.message }; };
-  };
-
-const updatePassword = async (args, context) =>
-  {
-    const { newPassword } = args;
-    const { res } = context;
-
-    try
-    {
-      const { id } = res.locals.user;
-      if(!id) return { status: "Request unauthorized!" };
-
-      await User.findByIdAndUpdate(id, { password: newPassword });
-
-      return { status: "Password has been updated!" };
-    }
-    catch (err) { return { status: err.message }; };
-  };
-
-module.exports = { loginUser, createUser, deleteUser, updatePassword };
+module.exports = { loginUser, createUser };

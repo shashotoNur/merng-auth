@@ -1,20 +1,54 @@
 
 const getProfile = (context) =>
-{
+    {
+        try
+        {
+            const { user } = context;
+            if(!user) return { status: "Request unauthorized!" };
+
+            const profile = {
+                name: user.name,
+                status: 'Looks like you are in!'
+            };
+
+            return profile;
+        }
+        catch(err) { return { status: err.message }; };
+    };
+
+const deleteUser = async (context) =>
+  {
     try
     {
-        console.log(context)
-        const { user } = context.res.locals;
+        const { user } = context;
         if(!user) return { status: "Request unauthorized!" };
 
-        const profile = {
-            name: user.name,
-            status: 'Looks like you are in!'
-        };
+        const id = user.id;
 
-        return profile;
+        var deletedUser = await User.findByIdAndDelete(id);
+
+        if(deletedUser.id !== null) return { status: 'Deletion failed! Try again.' };
+
+        return { status: 'User deleted successfully!' };
     }
-    catch(err) { return { status: err.message }; };
-};
+    catch (err) { return { status: err.message }; };
+  };
 
-module.exports = { getProfile };
+const updatePassword = async (args, context) =>
+  {
+    try
+    {
+        const { user } = context;
+        if(!user) return { status: "Request unauthorized!" };
+
+        const id = user.id;
+
+        const deletedUser = await User.findByIdAndUpdate(id, { password });
+        console.log(deletedUser)
+
+        return { status: "Password has been updated!" };
+    }
+    catch (err) { return { status: err.message }; };
+  };
+
+module.exports = { getProfile, deleteUser, updatePassword };

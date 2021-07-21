@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import GoogleLogin from 'react-google-login';
 import { useLazyQuery } from '@apollo/client';
 
-import { loginUserQuery } from '../../schema/';
+import { loginUserQuery } from '../../queries/authQueries';
 
 const Login = () =>
     {
@@ -20,6 +20,7 @@ const Login = () =>
         const successHandler = async (res) =>
         {
             const tokenId = res?.tokenId;
+            console.log(tokenId)
 
             try { loginUser({ variables: { tokenId }}); }
             catch(err) { console.log(err.message); };
@@ -40,11 +41,10 @@ const Login = () =>
 
         try
         {
-            console.log(data)
             data?.loginUserQuery.token && localStorage.setItem('token', data?.loginUserQuery.token);
             if(data?.loginUserQuery !== undefined) console.log(data?.loginUserQuery.status);
         }
-        catch(err) {console.log(err.message); };
+        catch(err) { console.log(err.message); };
 
         if (loading) return <p>Loading ...</p>;
         return (
