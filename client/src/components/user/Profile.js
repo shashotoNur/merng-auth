@@ -22,16 +22,19 @@ const Profile = () =>
 
     const deleteAccount = () =>
     {
-      try
-      {
-        deleteUser();
-        if(deletedUserData?.status === 'User deleted successfully!') logout();
-        else console.log(deletedUserData?.status);
-      }
+      try { deleteUser(); }
       catch(err) { console.log(err); };
     };
 
-    const logout = () => { localStorage.removeItem("token"); }
+    const logout = () => { console.log("logging out");localStorage.removeItem("token"); }
+
+    try
+    {
+      if(deletedUserData?.deleteUserMutation.status === 'User deleted successfully!') logout();
+      else if(deletedUserData?.deleteUserMutation !== undefined)
+        console.log(deletedUserData?.deleteUserMutation.status);
+    }
+    catch(err) { console.log(err); };
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;

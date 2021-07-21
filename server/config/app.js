@@ -22,7 +22,7 @@ app.use(getReqUser);
 app.use(process.env.GRAPHQL_ROUTE, graphqlHTTP((_req, res) =>
     ({
       schema: schema,
-      context: { user: res.locals?.user },
+      context: { res },
       graphiql: true
     })
   )

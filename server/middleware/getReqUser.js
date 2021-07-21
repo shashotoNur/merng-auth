@@ -6,16 +6,16 @@ const User = require('../models/userModel');
 const getReqUser = async (req, res, next) =>
   {
     const token = req.headers.token;
-
+    
     if (token == null || token == undefined) next();
-
+    
     else
     {
       try
       {
         const decodedToken = jwt.verify(token, jwtSecret);
         const id = decodedToken.id;
-
+        
         const user = await User.findOne({ _id: id });
         if (!user) return { status: 'User does not exists' };
         res.locals.user = user;

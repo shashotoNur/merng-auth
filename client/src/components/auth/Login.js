@@ -41,7 +41,7 @@ const Login = () =>
 
         try
         {
-            data?.loginUserQuery.token && localStorage.setItem('token', data?.loginUserQuery.token);
+            data?.loginUserQuery?.token && localStorage.setItem('token', data?.loginUserQuery.token);
             if(data?.loginUserQuery !== undefined) console.log(data?.loginUserQuery.status);
         }
         catch(err) { console.log(err.message); };

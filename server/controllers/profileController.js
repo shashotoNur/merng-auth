@@ -1,3 +1,4 @@
+const User = require("../models/userModel.js");
 
 const getProfile = (context) =>
     {
@@ -26,6 +27,7 @@ const deleteUser = async (context) =>
         const id = user.id;
 
         var deletedUser = await User.findByIdAndDelete(id);
+        console.log(deletedUser)
 
         if(deletedUser.id !== null) return { status: 'Deletion failed! Try again.' };
 
