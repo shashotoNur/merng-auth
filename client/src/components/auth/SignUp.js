@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import GoogleLogin from 'react-google-login';
 import { useMutation } from '@apollo/client';
@@ -10,6 +10,7 @@ import { createUserMutation } from '../../queries/authQueries';
 const SignUp = () =>
     {
         const [createUser, { data }] = useMutation(createUserMutation);
+        const history = useHistory();
 
         const [name, setName] = useState('Name');
         const [email, setEmail] = useState('Email');
@@ -43,8 +44,17 @@ const SignUp = () =>
 
         try
         {
-            if(data?.createUserMutation !== undefined) console.log(data);
-            data?.createUserMutation.token && localStorage.setItem('token', data?.createUserMutation.token);
+            const token = localStorage.getItem('token');
+            if(token) history.push("/");
+
+            if(data?.createUserMutation?.token !== undefined && data?.createUserMutation?.token)
+            {
+                localStorage.setItem('token', data?.createUserMutation.token);
+                console.log(data?.createUserMutation.status);
+                history.push("/");
+            }
+            else if(data?.createUserMutation?.status !== undefined)
+                console.log(data?.createUserMutation?.status);
         }
         catch(err) { console.log(err.message); };
 

@@ -7,14 +7,10 @@ const { getReqUser } = require('../middleware/getReqUser');
 
 const app = express();
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// enable cors
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true // <-- REQUIRED backend setting
-};
+const corsOptions = { origin: 'http://localhost:3000', credentials: true };
 app.use(cors(corsOptions));
 
 app.use(getReqUser);
@@ -22,11 +18,12 @@ app.use(getReqUser);
 app.use(process.env.GRAPHQL_ROUTE, graphqlHTTP((_req, res) =>
     ({
       schema: schema,
-      context: { res },
+      context: { user: res?.locals?.user },
       graphiql: true
     })
   )
 );
+
 
 console.log('Express app initialised!');
 

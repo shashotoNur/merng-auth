@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import GoogleLogin from 'react-google-login';
 import { useLazyQuery } from '@apollo/client';
@@ -10,6 +10,7 @@ import { loginUserQuery } from '../../queries/authQueries';
 const Login = () =>
     {
         const [loginUser, { loading, data }] = useLazyQuery(loginUserQuery);
+        const history = useHistory();
 
         const [email, setEmail] = useState('Email');
         const [password, setPassword] = useState('Password');
@@ -20,7 +21,6 @@ const Login = () =>
         const successHandler = async (res) =>
         {
             const tokenId = res?.tokenId;
-            console.log(tokenId)
 
             try { loginUser({ variables: { tokenId }}); }
             catch(err) { console.log(err.message); };
@@ -32,7 +32,8 @@ const Login = () =>
         {
             event.preventDefault();
 
-            try {
+            try
+            {
                 loginUser({ variables: { email, password } });
                 setEmail('Email'); setPassword('Password');
             }
@@ -41,12 +42,18 @@ const Login = () =>
 
         try
         {
-            data?.loginUserQuery?.token && localStorage.setItem('token', data?.loginUserQuery.token);
-            if(data?.loginUserQuery !== undefined) console.log(data?.loginUserQuery.status);
+            if(data?.loginUserQuery?.token !== undefined && data?.loginUserQuery?.token)
+            {
+                localStorage.setItem('token', data?.loginUserQuery.token);
+                console.log(data?.loginUserQuery.status);
+                history.push("/");
+            }
+            else if(data?.loginUserQuery?.status !== undefined)
+                console.log(data?.loginUserQuery?.status);
         }
         catch(err) { console.log(err.message); };
 
-        if (loading) return <p>Loading ...</p>;
+        if (loading) console.log('Logging in');
         return (
             <>
                 <form onSubmit={ submitHandler }>

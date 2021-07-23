@@ -22,7 +22,7 @@ const authLink = setContext((_, { headers }) =>
     const token = localStorage.getItem('token');
     const authLink = { headers: { ...headers, token } };
 
-    return authLink
+    return authLink;
   });
 
 const client = new ApolloClient(

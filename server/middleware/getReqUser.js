@@ -6,9 +6,13 @@ const User = require('../models/userModel');
 const getReqUser = async (req, res, next) =>
   {
     const token = req.headers.token;
-    
-    if (token == null || token == undefined) next();
-    
+
+    if (!token || token == "null" || token == undefined)
+    {
+      res.locals.user = null;
+      next();
+    }
+
     else
     {
       try

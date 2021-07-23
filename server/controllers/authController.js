@@ -42,7 +42,6 @@ const oAuthHandler = async (idToken) =>
 
 const loginUser = async (args) =>
   {
-    console.log(args)
     var { email, password, tokenId } = args;
 
     if(tokenId && !email && !password) return await oAuthHandler(tokenId);

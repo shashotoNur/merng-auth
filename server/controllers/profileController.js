@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 const User = require("../models/userModel.js");
 
 const getProfile = (context) =>
@@ -25,11 +27,7 @@ const deleteUser = async (context) =>
         if(!user) return { status: "Request unauthorized!" };
 
         const id = user.id;
-
-        var deletedUser = await User.findByIdAndDelete(id);
-        console.log(deletedUser)
-
-        if(deletedUser.id !== null) return { status: 'Deletion failed! Try again.' };
+        await User.findByIdAndDelete(id);
 
         return { status: 'User deleted successfully!' };
     }
@@ -43,10 +41,16 @@ const updatePassword = async (args, context) =>
         const { user } = context;
         if(!user) return { status: "Request unauthorized!" };
 
+        const { password } = args;
         const id = user.id;
 
-        const deletedUser = await User.findByIdAndUpdate(id, { password });
-        console.log(deletedUser)
+        const salt = await bcrypt.genSalt(10);
+        if (!salt) return { status: 'Something went wrong with bcrypt' };
+
+        const hash = await bcrypt.hash(password, salt);
+        if (!hash) return { status: 'Something went wrong hashing the password' };
+
+        await User.findByIdAndUpdate(id, { password: hash }, { upsert: true });
 
         return { status: "Password has been updated!" };
     }
